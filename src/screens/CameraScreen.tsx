@@ -1,5 +1,5 @@
-import React, { useContext, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, Pressable, ActivityIndicator, Animated, Easing } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as Speech from 'expo-speech';
 import * as Haptics from 'expo-haptics';
@@ -11,6 +11,18 @@ export default function CameraScreen() {
   const [result, setResult] = useState('');
   const [isDetecting, setIsDetecting] = useState(false);
   const feedback = useContext(FeedbackContext);
+  const readyPulse = useRef(new Animated.Value(0)).current;
+  const readyOpacity = readyPulse.interpolate({ inputRange: [0, 1], outputRange: [0.55, 1] });
+  const readyScale = readyPulse.interpolate({ inputRange: [0, 1], outputRange: [0.86, 1.18] });
+
+  useEffect(() => {
+    const pulse = Animated.loop(Animated.sequence([
+      Animated.timing(readyPulse, { toValue: 1, duration: 1000, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
+      Animated.timing(readyPulse, { toValue: 0, duration: 1000, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
+    ]));
+    pulse.start();
+    return () => pulse.stop();
+  }, [readyPulse]);
 
   const detect = async () => {
     if (!cameraRef.current || isDetecting) return;
@@ -54,7 +66,7 @@ export default function CameraScreen() {
         </View>
         <View style={styles.instruction}><Text style={styles.instructionText}>POSITION BANKNOTE IN FRAME</Text></View>
         <View style={styles.cameraHint}><Text style={styles.hintText}>Hold steady · Use good lighting</Text></View>
-        <View style={styles.scanIndicator}><View style={styles.scanDot} /><Text style={styles.scanText}>CAMERA READY</Text></View>
+        <View style={styles.scanIndicator}><Animated.View style={[styles.scanDot, { opacity: readyOpacity, transform: [{ scale: readyScale }] }]} /><Text style={styles.scanText}>CAMERA READY</Text></View>
       </View>
       <View style={styles.controls}>
         <Text style={styles.controlTitle}>Ready when you are</Text>
