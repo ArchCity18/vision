@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, Animated, Easing } from 'react-native';
 import * as Speech from 'expo-speech';
 import * as Haptics from 'expo-haptics';
-import { palette } from '../theme';
+import { FeedbackContext, palette } from '../theme';
 
 export default function HomeScreen({ navigation }: any) {
+  const feedback = useContext(FeedbackContext);
   const pressDepth = useRef(new Animated.Value(0)).current;
   const featureEntrance = useRef([new Animated.Value(0), new Animated.Value(0)]).current;
   const depthScale = pressDepth.interpolate({ inputRange: [0, 1], outputRange: [1, 0.975] });
@@ -22,25 +23,25 @@ export default function HomeScreen({ navigation }: any) {
   }).start();
 
   const openCamera = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    Speech.speak('Opening currency identification');
+    if (feedback.haptics) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (feedback.voice) Speech.speak('Opening currency identification');
     navigation.navigate('Camera');
   };
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <View style={styles.eyebrow}><View style={styles.eyebrowDot} /><Text style={styles.eyebrowText}>INDEPENDENCE, IN FOCUS</Text></View>
-      <Text style={styles.title}>Know what’s{ '\n' }in your hands.</Text>
-      <Text style={styles.subtitle}>Identify banknotes with a quick scan and clear spoken guidance.</Text>
+      <View style={styles.eyebrow}><View style={styles.eyebrowDot} /><Text style={styles.eyebrowText}>HERE WHEN YOU NEED US</Text></View>
+      <Text style={styles.title}>Let’s take a{ '\n' }closer look.</Text>
+      <Text style={styles.subtitle}>We’re here to help you check a banknote. Currency recognition is still being prepared.</Text>
       <Animated.View style={[styles.heroDepth, { transform: [{ perspective: 900 }, { scale: depthScale }, { rotateX: depthTilt }, { translateY: depthLift }] }]}>
       <Pressable style={({ pressed }) => [styles.hero, pressed && styles.pressed]} onPress={openCamera} onPressIn={() => animateDepth(1)} onPressOut={() => animateDepth(0)} accessibilityRole="button" accessibilityLabel="Start identifying currency">
         <View style={styles.heroTop}><View style={styles.cameraGlyph}><Text style={styles.glyphText}>◎</Text></View><Text style={styles.arrow}>↗</Text></View>
-        <View><Text style={styles.heroTitle}>Identify a banknote</Text><Text style={styles.heroCaption}>Point your camera at any note to begin</Text></View>
+        <View><Text style={styles.heroTitle}>Open the camera</Text><Text style={styles.heroCaption}>Recognition is coming soon; preview is ready.</Text></View>
       </Pressable>
       </Animated.View>
-      <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>Designed for confidence</Text><Text style={styles.sectionMeta}>A BETTER WAY TO CHECK</Text></View>
-      <Animated.View style={{ opacity: featureEntrance[0], transform: [{ translateY: featureEntrance[0].interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }] }}><View style={styles.featureCard}><View style={styles.featureIcon}><Text style={styles.featureGlyph}>◖</Text></View><View style={styles.featureCopy}><Text style={styles.featureTitle}>Hear your results</Text><Text style={styles.featureDescription}>Clear voice guidance, right when you need it.</Text></View></View></Animated.View>
-      <Animated.View style={{ opacity: featureEntrance[1], transform: [{ translateY: featureEntrance[1].interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }] }}><View style={styles.featureCard}><View style={styles.featureIcon}><Text style={styles.featureGlyph}>⌁</Text></View><View style={styles.featureCopy}><Text style={styles.featureTitle}>Simple by design</Text><Text style={styles.featureDescription}>An accessible experience with room to focus.</Text></View></View></Animated.View>
-      <Text style={styles.footer}>Made to put clarity in your hands.</Text>
+      <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>A little help, your way</Text><Text style={styles.sectionMeta}>MADE FOR YOU</Text></View>
+      <Animated.View style={{ opacity: featureEntrance[0], transform: [{ translateY: featureEntrance[0].interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }] }}><View style={styles.featureCard}><View style={styles.featureIcon}><Text style={styles.featureGlyph}>◖</Text></View><View style={styles.featureCopy}><Text style={styles.featureTitle}>Listen when you need to</Text><Text style={styles.featureDescription}>Spoken guidance can make each step easier.</Text></View></View></Animated.View>
+      <Animated.View style={{ opacity: featureEntrance[1], transform: [{ translateY: featureEntrance[1].interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }] }}><View style={styles.featureCard}><View style={styles.featureIcon}><Text style={styles.featureGlyph}>⌁</Text></View><View style={styles.featureCopy}><Text style={styles.featureTitle}>Take it at your pace</Text><Text style={styles.featureDescription}>Simple controls, with room to focus.</Text></View></View></Animated.View>
+      <Text style={styles.footer}>We’re glad you’re here.</Text>
     </ScrollView>
   );
 }

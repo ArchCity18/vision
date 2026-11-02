@@ -5,9 +5,9 @@ import { palette } from '../theme';
 export default function HistoryScreen() {
   return (
     <View style={styles.screen}>
-      <View style={styles.intro}><View style={styles.eyebrow}><View style={styles.dot} /><Text style={styles.eyebrowText}>YOUR ACTIVITY</Text></View><Text style={styles.title}>Detection history</Text><Text style={styles.subtitle}>A private space for recent identifications.</Text></View>
-      <View style={styles.card}><View style={styles.icon}><Text style={styles.iconText}>◷</Text></View><Text style={styles.cardTitle}>History isn’t available yet</Text><Text style={styles.description}>Currency recognition and saved scan history haven’t been configured. No scan results are currently saved.</Text></View>
-      <Text style={styles.note}>Your scan history is not stored on this device.</Text>
+      <View style={styles.intro}><View style={styles.eyebrow}><View style={styles.dot} /><Text style={styles.eyebrowText}>YOUR ACTIVITY</Text></View><Text style={styles.title}>Your recent checks</Text><Text style={styles.subtitle}>A handy place to find the notes you’ve checked.</Text></View>
+      <View style={styles.card}><View style={styles.icon}><Text style={styles.iconText}>◷</Text></View><Text style={styles.cardTitle}>Nothing here just yet</Text><Text style={styles.description}>Once saved check history is ready, you’ll find it here. We aren’t saving scans yet.</Text></View>
+      <Text style={styles.note}>Your scan history isn’t stored on this device yet.</Text>
     </View>
   );
 }

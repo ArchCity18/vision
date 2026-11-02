@@ -28,7 +28,7 @@ export default function CameraScreen() {
     if (!cameraRef.current || isDetecting) return;
     setIsDetecting(true);
     try {
-      const msg = 'A currency recognition model is not configured. No identification was made.';
+      const msg = 'We can’t identify banknotes just yet. No result was produced.';
       setResult(msg);
       if (feedback.haptics) Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
       if (feedback.voice) Speech.speak(msg);
@@ -47,7 +47,7 @@ export default function CameraScreen() {
       <View style={styles.permissionScreen}>
         <View style={styles.permissionIcon}><Text style={styles.permissionGlyph}>◎</Text></View>
         <Text style={styles.permissionTitle}>Your camera, your call</Text>
-        <Text style={styles.permissionCopy}>Allow camera access to preview a banknote. The app does not currently have a currency recognition model, so it cannot identify notes yet.</Text>
+        <Text style={styles.permissionCopy}>Allow camera access to see a live preview of your banknote. We’re still getting currency recognition ready.</Text>
         <Pressable style={({ pressed }) => [styles.permissionButton, pressed && styles.pressed]} onPress={requestPermission} accessibilityRole="button" accessibilityLabel="Allow camera access">
           <Text style={styles.permissionButtonText}>{permission?.canAskAgain === false ? 'Camera access unavailable' : 'Allow camera access'}</Text>
         </Pressable>
@@ -70,13 +70,13 @@ export default function CameraScreen() {
       </View>
       <View style={styles.controls}>
         <Text style={styles.controlTitle}>Ready when you are</Text>
-        <Text style={styles.controlCopy}>Place a single banknote flat in the frame.</Text>
+        <Text style={styles.controlCopy}>Hold one banknote steady in the frame.</Text>
         {result ? <View style={styles.resultCard} accessibilityLiveRegion="polite"><View style={styles.resultDot} /><Text style={styles.resultText}>{result}</Text></View> : null}
         <Pressable style={({ pressed }) => [styles.button, pressed && styles.pressed, isDetecting && styles.buttonBusy]} onPress={detect} accessibilityRole="button" accessibilityLabel="Check whether currency recognition is available" disabled={isDetecting}>
           {isDetecting ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.buttonIcon}>◎</Text>}
-          <Text style={styles.buttonText}>{isDetecting ? 'Checking…' : 'Check recognition setup'}</Text>
+          <Text style={styles.buttonText}>{isDetecting ? 'One moment…' : 'See what’s available'}</Text>
         </Pressable>
-        <Text style={styles.privacyNote}>Recognition model not installed</Text>
+        <Text style={styles.privacyNote}>Banknote recognition is coming soon.</Text>
       </View>
     </View>
   );

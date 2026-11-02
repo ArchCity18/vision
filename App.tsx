@@ -1,6 +1,7 @@
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View, StyleSheet } from 'react-native';
+import { useState } from 'react';
 import React from 'react';
 
 import HomeScreen from './src/screens/HomeScreen';
@@ -24,8 +25,10 @@ const navigationTheme = {
 };
 
 export default function App() {
+  const [voice, setVoice] = useState(true);
+  const [haptics, setHaptics] = useState(true);
   return (
-    <FeedbackContext.Provider value={{ voice: true, haptics: true }}>
+    <FeedbackContext.Provider value={{ voice, haptics }}>
       <NavigationContainer theme={navigationTheme}>
         <Tab.Navigator screenOptions={({ route }) => ({
           headerTitleAlign: 'left', headerTitleStyle: styles.headerTitle,
@@ -40,7 +43,9 @@ export default function App() {
           <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Vision Assist' }} />
           <Tab.Screen name="Camera" component={CameraScreen} options={{ title: 'Identify currency' }} />
           <Tab.Screen name="History" component={HistoryScreen} options={{ title: 'Your activity' }} />
-          <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: 'Preferences' }} />
+          <Tab.Screen name="Settings" options={{ title: 'Preferences' }}>
+            {() => <SettingsScreen voice={voice} setVoice={setVoice} haptics={haptics} setHaptics={setHaptics} />}
+          </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
     </FeedbackContext.Provider>
