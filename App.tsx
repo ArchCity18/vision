@@ -1,0 +1,53 @@
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Text, View, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import React from 'react';
+
+import HomeScreen from './src/screens/HomeScreen';
+import CameraScreen from './src/screens/CameraScreen';
+import HistoryScreen from './src/screens/HistoryScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
+
+export const palette = {
+  background: '#F5F7F4', surface: '#FFFFFF', ink: '#182620', muted: '#748078',
+  primary: '#176B50', primaryDark: '#10523D', soft: '#E8F1EB', border: '#E8ECE8',
+  amber: '#F3B84B', danger: '#A3443D',
+};
+export const FeedbackContext = React.createContext({ voice: true, haptics: true });
+const Tab = createBottomTabNavigator();
+const tabIcons: Record<string, string> = { Home: '⌂', Camera: '◎', History: '◷', Settings: '⚙' };
+
+export default function App() {
+  return (
+    <FeedbackContext.Provider value={{ voice: true, haptics: true }}>
+      <NavigationContainer>
+        <Tab.Navigator screenOptions={({ route }) => ({
+          headerTitleAlign: 'left', headerTitleStyle: styles.headerTitle,
+          headerStyle: styles.header, headerShadowVisible: false,
+          headerRight: () => <View style={styles.status}><View style={styles.statusDot} /><Text style={styles.statusText}>READY</Text></View>,
+          tabBarLabel: route.name === 'Camera' ? 'Detect' : route.name,
+          tabBarIcon: ({ focused }) => <Text style={[styles.tabIcon, focused && styles.tabIconActive]}>{tabIcons[route.name]}</Text>,
+          tabBarActiveTintColor: palette.primary, tabBarInactiveTintColor: palette.muted,
+          tabBarLabelStyle: styles.tabLabel, tabBarStyle: styles.tabBar,
+          tabBarAccessibilityLabel: 'Main navigation',
+        })}>
+          <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Vision Assist' }} />
+          <Tab.Screen name="Camera" component={CameraScreen} options={{ title: 'Identify currency' }} />
+          <Tab.Screen name="History" component={HistoryScreen} options={{ title: 'Your activity' }} />
+          <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: 'Preferences' }} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </FeedbackContext.Provider>
+  );
+}
+
+const styles = StyleSheet.create({
+  header: { backgroundColor: palette.background }, headerTitle: { color: palette.ink, fontSize: 19, fontWeight: '700' },
+  status: { flexDirection: 'row', alignItems: 'center', gap: 6, marginRight: 18, backgroundColor: palette.soft, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 20 },
+  statusDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: palette.primary },
+  statusText: { color: palette.primaryDark, fontSize: 10, fontWeight: '800', letterSpacing: 1 },
+  tabBar: { height: 78, paddingTop: 9, paddingBottom: 10, backgroundColor: palette.surface, borderTopColor: palette.border },
+  tabIcon: { color: palette.muted, fontSize: 22 }, tabIconActive: { color: palette.primary },
+  tabLabel: { fontSize: 11, fontWeight: '600' },
+});

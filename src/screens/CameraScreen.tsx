@@ -1,0 +1,79 @@
+import React, { useContext, useRef, useState } from 'react';
+import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import * as Speech from 'expo-speech';
+import * as Haptics from 'expo-haptics';
+import { FeedbackContext, palette } from '../../App';
+
+export default function CameraScreen() {
+  const [permission, requestPermission] = useCameraPermissions();
+  const cameraRef = useRef<CameraView>(null);
+  const [result, setResult] = useState('');
+  const [isDetecting, setIsDetecting] = useState(false);
+  const feedback = useContext(FeedbackContext);
+
+  const detect = async () => {
+    if (!cameraRef.current || isDetecting) return;
+    setIsDetecting(true);
+    try {
+      const msg = 'A currency recognition model is not configured. No identification was made.';
+      setResult(msg);
+      if (feedback.haptics) Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+      if (feedback.voice) Speech.speak(msg);
+    } catch {
+      const msg = 'Detection failed. Try again.';
+      setResult(msg);
+      if (feedback.haptics) Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      if (feedback.voice) Speech.speak(msg);
+    } finally {
+      setIsDetecting(false);
+    }
+  };
+
+  if (!permission?.granted) {
+    return (
+      <View style={styles.permissionScreen}>
+        <View style={styles.permissionIcon}><Text style={styles.permissionGlyph}>◎</Text></View>
+        <Text style={styles.permissionTitle}>Your camera, your call</Text>
+        <Text style={styles.permissionCopy}>Allow camera access to preview a banknote. The app does not currently have a currency recognition model, so it cannot identify notes yet.</Text>
+        <Pressable style={({ pressed }) => [styles.permissionButton, pressed && styles.pressed]} onPress={requestPermission} accessibilityRole="button" accessibilityLabel="Allow camera access">
+          <Text style={styles.permissionButtonText}>{permission?.canAskAgain === false ? 'Camera access unavailable' : 'Allow camera access'}</Text>
+        </Pressable>
+        {permission?.canAskAgain === false && <Text style={styles.deniedHint}>Update camera access in your device settings.</Text>}
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.screen}>
+      <View style={styles.cameraFrame}>
+        <CameraView ref={cameraRef} style={StyleSheet.absoluteFill} facing="back" />
+        <View pointerEvents="none" style={styles.frameOverlay}>
+          <View style={[styles.corner, styles.topLeft]} /><View style={[styles.corner, styles.topRight]} />
+          <View style={[styles.corner, styles.bottomLeft]} /><View style={[styles.corner, styles.bottomRight]} />
+        </View>
+        <View style={styles.instruction}><Text style={styles.instructionText}>POSITION BANKNOTE IN FRAME</Text></View>
+        <View style={styles.cameraHint}><Text style={styles.hintText}>Hold steady · Use good lighting</Text></View>
+        <View style={styles.scanIndicator}><View style={styles.scanDot} /><Text style={styles.scanText}>CAMERA READY</Text></View>
+      </View>
+      <View style={styles.controls}>
+        <Text style={styles.controlTitle}>Ready when you are</Text>
+        <Text style={styles.controlCopy}>Place a single banknote flat in the frame.</Text>
+        {result ? <View style={styles.resultCard} accessibilityLiveRegion="polite"><View style={styles.resultDot} /><Text style={styles.resultText}>{result}</Text></View> : null}
+        <Pressable style={({ pressed }) => [styles.button, pressed && styles.pressed, isDetecting && styles.buttonBusy]} onPress={detect} accessibilityRole="button" accessibilityLabel="Check whether currency recognition is available" disabled={isDetecting}>
+          {isDetecting ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.buttonIcon}>◎</Text>}
+          <Text style={styles.buttonText}>{isDetecting ? 'Checking…' : 'Check recognition setup'}</Text>
+        </Pressable>
+        <Text style={styles.privacyNote}>Recognition model not installed</Text>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: palette.background }, cameraFrame: { flex: 1, minHeight: 260, margin: 16, marginBottom: 4, borderRadius: 22, overflow: 'hidden', backgroundColor: '#152019' },
+  frameOverlay: { ...StyleSheet.absoluteFill, margin: '9%' }, corner: { position: 'absolute', width: 35, height: 35, borderColor: '#F4C869', borderWidth: 3 }, topLeft: { top: 0, left: 0, borderRightWidth: 0, borderBottomWidth: 0, borderTopLeftRadius: 9 }, topRight: { top: 0, right: 0, borderLeftWidth: 0, borderBottomWidth: 0, borderTopRightRadius: 9 }, bottomLeft: { bottom: 0, left: 0, borderRightWidth: 0, borderTopWidth: 0, borderBottomLeftRadius: 9 }, bottomRight: { bottom: 0, right: 0, borderLeftWidth: 0, borderTopWidth: 0, borderBottomRightRadius: 9 },
+  instruction: { position: 'absolute', top: '13%', alignSelf: 'center', paddingVertical: 9, paddingHorizontal: 14, borderRadius: 20, backgroundColor: 'rgba(13,26,19,0.78)' }, instructionText: { color: '#FFFFFF', fontSize: 9, letterSpacing: 1.5, fontWeight: '800' }, cameraHint: { position: 'absolute', bottom: '14%', alignSelf: 'center', paddingVertical: 8, paddingHorizontal: 12, borderRadius: 18, backgroundColor: 'rgba(13,26,19,0.75)' }, hintText: { color: '#FFFFFF', fontSize: 11 }, scanIndicator: { position: 'absolute', top: 14, right: 14, flexDirection: 'row', alignItems: 'center', gap: 6, borderRadius: 20, backgroundColor: 'rgba(13,26,19,0.73)', paddingHorizontal: 10, paddingVertical: 7 }, scanDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#9BDD9E' }, scanText: { color: '#FFFFFF', fontSize: 8, fontWeight: '800', letterSpacing: 1 },
+  controls: { backgroundColor: palette.surface, borderTopLeftRadius: 23, borderTopRightRadius: 23, paddingHorizontal: 22, paddingTop: 19, paddingBottom: 20, borderTopWidth: 1, borderColor: palette.border }, controlTitle: { color: palette.ink, fontSize: 17, fontWeight: '700' }, controlCopy: { color: palette.muted, fontSize: 12, marginTop: 4 }, resultCard: { flexDirection: 'row', alignItems: 'center', gap: 9, padding: 12, borderRadius: 12, backgroundColor: palette.soft, marginTop: 14 }, resultDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: palette.primary }, resultText: { color: palette.primaryDark, fontSize: 13, fontWeight: '700', flex: 1 }, button: { height: 53, borderRadius: 15, marginTop: 16, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 9, backgroundColor: palette.primary }, buttonBusy: { opacity: 0.75 }, pressed: { opacity: 0.87 }, buttonIcon: { color: '#FFFFFF', fontSize: 21 }, buttonText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700' }, privacyNote: { color: palette.muted, fontSize: 10, textAlign: 'center', marginTop: 11 },
+  permissionScreen: { flex: 1, backgroundColor: palette.background, alignItems: 'center', justifyContent: 'center', padding: 29 }, permissionIcon: { width: 68, height: 68, borderRadius: 22, backgroundColor: palette.soft, alignItems: 'center', justifyContent: 'center', marginBottom: 22 }, permissionGlyph: { color: palette.primary, fontSize: 36 }, permissionTitle: { color: palette.ink, fontSize: 22, fontWeight: '800', textAlign: 'center' }, permissionCopy: { color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'center', marginTop: 10, marginBottom: 22 }, permissionButton: { width: '100%', padding: 16, alignItems: 'center', borderRadius: 14, backgroundColor: palette.primary }, permissionButtonText: { color: '#FFFFFF', fontWeight: '700', fontSize: 14 }, deniedHint: { color: palette.muted, fontSize: 12, marginTop: 13 },
+});

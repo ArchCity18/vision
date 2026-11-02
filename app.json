@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Vision Assist",
+    "slug": "vision",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "privacy": "public",
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Vision Assist to access your camera when you choose to scan a banknote.",
+          "recordAudioAndroid": false
+        }
+      ]
+    ],
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
