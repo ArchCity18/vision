@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { palette } from '../../App';
+import { palette } from '../theme';
 
 export default function HistoryScreen() {
   return (

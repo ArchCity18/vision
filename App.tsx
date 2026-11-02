@@ -1,20 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View, StyleSheet } from 'react-native';
-import { useState } from 'react';
 import React from 'react';
 
 import HomeScreen from './src/screens/HomeScreen';
 import CameraScreen from './src/screens/CameraScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
-
-export const palette = {
-  background: '#F5F7F4', surface: '#FFFFFF', ink: '#182620', muted: '#748078',
-  primary: '#176B50', primaryDark: '#10523D', soft: '#E8F1EB', border: '#E8ECE8',
-  amber: '#F3B84B', danger: '#A3443D',
-};
-export const FeedbackContext = React.createContext({ voice: true, haptics: true });
+import { FeedbackContext, palette } from './src/theme';
 const Tab = createBottomTabNavigator();
 const tabIcons: Record<string, string> = { Home: '⌂', Camera: '◎', History: '◷', Settings: '⚙' };
 

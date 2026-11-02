@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-nati
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as Speech from 'expo-speech';
 import * as Haptics from 'expo-haptics';
-import { FeedbackContext, palette } from '../../App';
+import { FeedbackContext, palette } from '../theme';
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();

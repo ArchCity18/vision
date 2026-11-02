@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import * as Speech from 'expo-speech';
 import * as Haptics from 'expo-haptics';
-import { palette } from '../../App';
+import { palette } from '../theme';
 
 export default function HomeScreen({ navigation }: any) {
   const openCamera = () => {
