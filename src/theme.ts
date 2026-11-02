@@ -1,16 +1,17 @@
 import React from 'react';
 
 export const palette = {
-  // Warm ivory, deep teal, and brushed brass for a calm, premium feel.
-  background: '#F4F2EC',
-  surface: '#FFFDF8',
-  ink: '#172B31',
-  muted: '#5C6B6B',
-  primary: '#1F625B',
-  primaryDark: '#174843',
-  soft: '#E6EEEA',
-  border: '#E5E1D7',
-  amber: '#C69A55',
+  // Warm ivory, tailored navy, and brushed brass.
+  background: '#F3EEE4',
+  surface: '#FFFCF6',
+  ink: '#1B2938',
+  muted: '#626A72',
+  primary: '#263B52',
+  primaryDark: '#192B3D',
+  soft: '#EEE6D8',
+  border: '#E3D9C9',
+  amber: '#B78B50',
+  brassSoft: '#F1E5D1',
   danger: '#A3443D',
 };
 
