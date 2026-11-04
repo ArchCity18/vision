@@ -1,1 +1,37 @@
-{"name":"vision","version":"1.0.0","main":"index.ts","dependencies":{"expo":"~58.0.22","expo-status-bar":"~58.0.4","react":"19.3.0","react-native":"0.88.1","expo-camera":"~17.0.0","expo-speech":"~14.0.0","expo-haptics":"~15.0.0","expo-sqlite":"~16.0.0","@react-navigation/native":"^7.0.0","@react-navigation/bottom-tabs":"^7.0.0","react-native-screens":"~4.16.0","react-native-safe-area-context":"~5.6.0"},"devDependencies":{"@types/react":"~19.3.0","typescript":"~6.0.3"},"scripts":{"start":"expo start","android":"expo start --android","ios":"expo start --ios","web":"expo start --web"},"private":true}
+{
+  "name": "vision",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit",
+    "security:check": "npm audit"
+  },
+  "dependencies": {
+    "@react-navigation/bottom-tabs": "^7.0.0",
+    "@react-navigation/native": "^7.0.0",
+    "expo": "~58.0.22",
+    "expo-camera": "~58.0.14",
+    "expo-haptics": "~58.0.7",
+    "expo-speech": "~58.0.3",
+    "expo-status-bar": "~58.0.4",
+    "react": "19.3.0",
+    "react-native": "0.88.1",
+    "react-native-safe-area-context": "~5.10.1",
+    "react-native-screens": "~4.30.1"
+  },
+  "devDependencies": {
+    "@types/react": "~19.3.0",
+    "typescript": "~6.0.3"
+  },
+  "overrides": {
+    "glob@^13.0.0": "^14.0.3",
+    "@expo/fingerprint": {
+      "minimatch": "^11.0.4"
+    }
+  },
+  "private": true
+}
