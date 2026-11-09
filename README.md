@@ -6,12 +6,13 @@ Vision Assist is an Expo and React Native prototype for an accessible banknote-c
 
 ## What works today
 
-- Home, camera, history, and preferences screens with a warm ivory, navy, and brass theme.
+- Home, camera, and preferences screens with a warm ivory, navy, and brass theme.
 - Camera permission is requested only after the user chooses to allow it.
 - Live camera preview when permission is granted.
 - Voice and touch feedback controls. Their values apply across the app while it is open and reset to on after restarting.
+- Spoken navigation announces each tab and gives short instructions when a screen opens. A repeat button is available on each screen.
 - Camera-ready pulse, home-card depth response, and feature-card entrance motion.
-- Clear empty states for recognition and history features that are not available yet.
+- A clear message explains that banknote recognition is not available yet.
 
 ## Run the app
 
@@ -43,8 +44,8 @@ App.tsx                  Navigation, app-wide feedback settings, navigation them
 src/theme.ts             Shared colors and feedback context
 src/screens/HomeScreen.tsx
 src/screens/CameraScreen.tsx
-src/screens/HistoryScreen.tsx
 src/screens/SettingsScreen.tsx
+src/hooks/useSpokenGuidance.ts  Spoken screen announcements and repeat guidance
 assets/                  Expo app, splash, and adaptive icons
 app.json                 Expo identity, platforms, and native permission config
 package.json             Scripts and direct dependencies
@@ -57,7 +58,7 @@ docs/architecture.md     Screen behavior, data flow, and known limitations
 
 The app is a single React Native entry point registered by `index.ts`. `App.tsx` owns the bottom-tab navigator and the in-memory voice and haptic preferences. Screens use `src/theme.ts` for the shared palette and feedback context. More detail is in [docs/architecture.md](docs/architecture.md).
 
-There is no server, account system, analytics, or network API in the current implementation. The history screen is informational only. `expo-sqlite` was removed because the app does not currently persist scan history or settings.
+There is no server, account system, analytics, or network API in the current implementation. Scan history and settings are not persisted. `expo-sqlite` was removed because the app does not currently store data.
 
 ## Permissions and privacy
 
@@ -65,6 +66,7 @@ There is no server, account system, analytics, or network API in the current imp
 - Android audio recording is explicitly disabled in the Expo Camera plugin configuration.
 - The current code renders a camera preview but does not capture, upload, or store an image.
 - Voice and haptic preferences are held in memory and are not persisted.
+- Spoken navigation uses text to speech. The app does not listen for spoken commands or request microphone access.
 - No credentials or API keys are required. Local `.env` files are ignored by Git.
 - Dependabot is configured to check npm dependencies weekly and open update pull requests.
 
@@ -90,7 +92,8 @@ On 2026-11-02, `npm audit` reported 11 moderate advisories in Expo SDK 58's `glo
 ## Current limitations
 
 - The app does not recognize currencies. The scan action explains that no identification was made.
-- The app does not save scan history.
+- The History tab was removed because scans are not saved.
+- Voice navigation provides spoken screen instructions and repeat prompts; it does not accept voice commands.
 - Feedback settings are not saved after the app closes.
 - The camera flow and app have been bundle-checked, but still need hands-on testing on supported phones and with screen readers.
 

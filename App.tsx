@@ -6,11 +6,10 @@ import React from 'react';
 
 import HomeScreen from './src/screens/HomeScreen';
 import CameraScreen from './src/screens/CameraScreen';
-import HistoryScreen from './src/screens/HistoryScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import { FeedbackContext, palette } from './src/theme';
 const Tab = createBottomTabNavigator();
-const tabIcons: Record<string, string> = { Home: '⌂', Camera: '◎', History: '◷', Settings: '⚙' };
+const tabIcons: Record<string, string> = { Home: '⌂', Camera: '◎', Settings: '⚙' };
 const navigationTheme = {
   ...DefaultTheme,
   colors: {
@@ -38,11 +37,10 @@ export default function App() {
           tabBarIcon: ({ focused }) => <View style={styles.tabIconWrap}><Text style={[styles.tabIcon, focused && styles.tabIconActive]}>{tabIcons[route.name]}</Text>{focused && <View style={styles.tabAccent} />}</View>,
           tabBarActiveTintColor: palette.amber, tabBarInactiveTintColor: palette.muted,
           tabBarLabelStyle: styles.tabLabel, tabBarStyle: styles.tabBar,
-          tabBarAccessibilityLabel: 'Main navigation',
+          tabBarAccessibilityLabel: `${route.name === 'Camera' ? 'Detect' : route.name} tab`,
         })}>
           <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Vision Assist' }} />
-          <Tab.Screen name="Camera" component={CameraScreen} options={{ title: 'Identify currency' }} />
-          <Tab.Screen name="History" component={HistoryScreen} options={{ title: 'Your activity' }} />
+          <Tab.Screen name="Camera" component={CameraScreen} options={{ title: 'Camera preview' }} />
           <Tab.Screen name="Settings" options={{ title: 'Preferences' }}>
             {() => <SettingsScreen voice={voice} setVoice={setVoice} haptics={haptics} setHaptics={setHaptics} />}
           </Tab.Screen>
