@@ -4,7 +4,7 @@ import * as Speech from 'expo-speech';
 import { FeedbackContext } from '../theme';
 
 export function useSpokenGuidance(message: string) {
-  const { voice } = useContext(FeedbackContext);
+  const { voice, setRepeatGuidance } = useContext(FeedbackContext);
 
   const announce = useCallback(() => {
     if (!voice) return;
@@ -13,9 +13,13 @@ export function useSpokenGuidance(message: string) {
   }, [message, voice]);
 
   useFocusEffect(useCallback(() => {
+    setRepeatGuidance(announce);
     announce();
-    return () => Speech.stop();
-  }, [announce]));
+    return () => {
+      setRepeatGuidance(null);
+      Speech.stop();
+    };
+  }, [announce, setRepeatGuidance]));
 
   return { announce, voiceEnabled: voice };
 }

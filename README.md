@@ -11,6 +11,7 @@ Vision Assist is an Expo and React Native prototype for an accessible banknote-c
 - Live camera preview when permission is granted.
 - Voice and touch feedback controls. Their values apply across the app while it is open and reset to on after restarting.
 - Spoken navigation announces each tab and gives short instructions when a screen opens. A repeat button is available on each screen.
+- On-demand voice commands for Home, Camera, Settings, Repeat instructions, and Help. Listening starts only after the Voice button is pressed and ends after one command.
 - Camera-ready pulse, home-card depth response, and feature-card entrance motion.
 - A clear message explains that banknote recognition is not available yet.
 
@@ -20,7 +21,7 @@ Vision Assist is an Expo and React Native prototype for an accessible banknote-c
 
 - Node.js 22 or newer.
 - npm.
-- Expo Go on an Android or iOS device, or a configured native development environment.
+- Expo Go for the earlier prototype. This version requires the custom development client because speech recognition adds native code.
 
 ### Install and start
 
@@ -29,7 +30,7 @@ npm install
 npm start
 ```
 
-Scan the Expo QR code with Expo Go. For a physical phone, keep the phone and development computer on the same network. If Expo Go appears to show an older bundle, stop the server and restart with a clean Metro cache:
+Build an installable Android development client with `npx eas-cli build --profile development --platform android` (or iOS with `--platform ios`), then install it on the phone and start Metro with `npx expo start --dev-client`. A local build is also available with `npx expo run:android` or `npx expo run:ios` when the native toolchain is installed. Expo Go cannot run this version because it does not contain the speech-recognition native module. For a physical phone, keep the phone and development computer on the same network. If the app appears to show an older bundle, stop the server and restart with a clean Metro cache:
 
 ```sh
 npx expo start --clear
@@ -66,7 +67,7 @@ There is no server, account system, analytics, or network API in the current imp
 - Android audio recording is explicitly disabled in the Expo Camera plugin configuration.
 - The current code renders a camera preview but does not capture, upload, or store an image.
 - Voice and haptic preferences are held in memory and are not persisted.
-- Spoken navigation uses text to speech. The app does not listen for spoken commands or request microphone access.
+- Spoken navigation uses text to speech. Voice commands use system speech recognition only after the user presses the Voice button and grants microphone/speech recognition access. The session ends after one command; the app does not listen in the background or save audio or transcripts. The system recognition service may process audio according to device and OS settings.
 - No credentials or API keys are required. Local `.env` files are ignored by Git.
 - Dependabot is configured to check npm dependencies weekly and open update pull requests.
 
@@ -93,7 +94,7 @@ On 2026-11-02, `npm audit` reported 11 moderate advisories in Expo SDK 58's `glo
 
 - The app does not recognize currencies. The scan action explains that no identification was made.
 - The History tab was removed because scans are not saved.
-- Voice navigation provides spoken screen instructions and repeat prompts; it does not accept voice commands.
+- Voice commands need a development build and have not yet been exercised on a physical Android or iOS device. Expo Go does not include the required native speech-recognition module.
 - Feedback settings are not saved after the app closes.
 - The camera flow and app have been bundle-checked, but still need hands-on testing on supported phones and with screen readers.
 

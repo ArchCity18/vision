@@ -15,4 +15,8 @@ export const palette = {
   danger: '#A3443D',
 };
 
-export const FeedbackContext = React.createContext({ voice: true, haptics: true });
+export const FeedbackContext = React.createContext({
+  voice: true,
+  haptics: true,
+  setRepeatGuidance: (_callback: (() => void) | null) => {},
+});

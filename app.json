@@ -12,6 +12,13 @@
           "cameraPermission": "Allow Vision Assist to access your camera when you choose to scan a banknote.",
           "recordAudioAndroid": false
         }
+      ],
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Allow Vision Assist to listen only when you start a voice command.",
+          "speechRecognitionPermission": "Allow Vision Assist to turn your spoken command into text."
+        }
       ]
     ],
     "icon": "./assets/icon.png",
