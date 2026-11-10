@@ -68,19 +68,19 @@ export default function CameraScreen() {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.cameraFrame}>
+      <View style={styles.cameraFrame} accessibilityLabel="Live camera preview. Align a banknote within the corner guides. This app cannot identify currency yet.">
         <CameraView ref={cameraRef} style={StyleSheet.absoluteFill} facing="back" />
         <View pointerEvents="none" style={styles.frameOverlay}>
           <View style={[styles.corner, styles.topLeft]} /><View style={[styles.corner, styles.topRight]} />
           <View style={[styles.corner, styles.bottomLeft]} /><View style={[styles.corner, styles.bottomRight]} />
         </View>
-        <View style={styles.instruction}><Text style={styles.instructionText}>POSITION BANKNOTE IN FRAME</Text></View>
-        <View style={styles.cameraHint}><Text style={styles.hintText}>Hold steady · Use good lighting</Text></View>
-        <View style={styles.scanIndicator}><Animated.View style={[styles.scanDot, { opacity: readyOpacity, transform: [{ scale: readyScale }] }]} /><Text style={styles.scanText}>CAMERA READY</Text></View>
+        <View style={styles.instruction}><Text style={styles.instructionText}>ALIGN BANKNOTE WITH GUIDES</Text></View>
+        <View style={styles.cameraHint}><Text style={styles.hintText}>Hold steady · Find even light</Text></View>
+        <View style={styles.scanIndicator}><Animated.View style={[styles.scanDot, { opacity: readyOpacity, transform: [{ scale: readyScale }] }]} /><Text style={styles.scanText}>PREVIEW ACTIVE</Text></View>
       </View>
       <View style={styles.controls}>
         <Text style={styles.controlTitle} accessibilityRole="header">Ready when you are</Text>
-        <Text style={styles.controlCopy}>Hold one banknote steady in the frame.</Text>
+        <Text style={styles.controlCopy}>Center one banknote in the guides. Identification is not available yet.</Text>
         {voiceEnabled && <Pressable onPress={announce} style={styles.repeatButton} accessibilityRole="button" accessibilityLabel="Repeat camera instructions" accessibilityHint="Plays a brief spoken orientation for this screen."><Text style={styles.repeatButtonText}>Hear these instructions again</Text></Pressable>}
         {result ? <View style={styles.resultCard} accessibilityLiveRegion="polite"><View style={styles.resultDot} /><Text style={styles.resultText}>{result}</Text></View> : null}
         <Pressable style={({ pressed }) => [styles.button, pressed && styles.pressed, isDetecting && styles.buttonBusy]} onPress={detect} accessibilityRole="button" accessibilityLabel="Check whether currency recognition is available" disabled={isDetecting}>
