@@ -6,7 +6,7 @@ import { useSpokenGuidance } from '../hooks/useSpokenGuidance';
 
 export default function HomeScreen({ navigation }: any) {
   const feedback = useContext(FeedbackContext);
-  const { announce, voiceEnabled } = useSpokenGuidance('Home. Welcome to Vision Assist. Currency recognition is still being prepared. Choose Open the camera to see a live preview, or choose Settings to change voice and touch feedback. The tabs are Home, Detect, and Settings.');
+  const { announce, voiceEnabled } = useSpokenGuidance(`Home. Welcome to Vision Assist. You can open the camera for a live banknote preview. Recognition is still being prepared, so I cannot identify or save a note yet. Voice navigation is ${feedback.voice ? 'on' : 'off'}. Choose Open the camera or Settings.`);
   const pressDepth = useRef(new Animated.Value(0)).current;
   const featureEntrance = useRef([new Animated.Value(0), new Animated.Value(0)]).current;
   const depthScale = pressDepth.interpolate({ inputRange: [0, 1], outputRange: [1, 0.975] });

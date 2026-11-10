@@ -15,11 +15,14 @@ export default function CameraScreen() {
   const readyPulse = useRef(new Animated.Value(0)).current;
   const readyOpacity = readyPulse.interpolate({ inputRange: [0, 1], outputRange: [0.55, 1] });
   const readyScale = readyPulse.interpolate({ inputRange: [0, 1], outputRange: [0.86, 1.18] });
-  const { announce, voiceEnabled } = useSpokenGuidance(!permission
-    ? 'Detect. Checking camera access. Please wait.'
+  const cameraGuidance = !permission
+    ? 'Detect. Checking camera access. I will tell you when the preview is ready.'
     : permission.granted
-    ? 'Detect. Your camera preview is ready. Hold one banknote steady in the frame. Vision Assist cannot identify currency yet. Choose Settings to change voice or touch feedback. The tabs are Home, Detect, and Settings.'
-    : 'Detect. Camera access is needed for a live preview. Choose Allow camera access to continue. Currency recognition is still being prepared. The tabs are Home, Detect, and Settings.');
+      ? 'Detect. Your camera preview is ready. Hold one banknote steady in the frame. I cannot identify or save a note yet. Choose Home to return or Settings to change feedback.'
+      : permission.canAskAgain
+        ? 'Detect. Camera access is off. Choose Allow camera access to see a live preview. You can still use Home and Settings without allowing camera access.'
+        : 'Detect. Camera access is off. To show a preview, change Vision Assist camera permission in your phone settings. You can still use Home and Settings.';
+  const { announce, voiceEnabled } = useSpokenGuidance(cameraGuidance);
 
   useEffect(() => {
     const pulse = Animated.loop(Animated.sequence([

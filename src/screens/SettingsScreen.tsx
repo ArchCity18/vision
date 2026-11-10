@@ -1,10 +1,31 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Switch, ScrollView, Pressable } from 'react-native';
+import * as Speech from 'expo-speech';
 import { palette } from '../theme';
 import { useSpokenGuidance } from '../hooks/useSpokenGuidance';
 
 export default function SettingsScreen({ voice, setVoice, haptics, setHaptics }: { voice: boolean; setVoice: (value: boolean) => void; haptics: boolean; setHaptics: (value: boolean) => void }) {
-  const { announce, voiceEnabled } = useSpokenGuidance('Settings. Voice navigation reads the name and instructions for each screen when you open a tab. Turn Voice navigation on or off below. Touch feedback controls vibration. These choices last until the app closes. The tabs are Home, Detect, and Settings.');
+  const { announce, voiceEnabled } = useSpokenGuidance(`Settings. Voice navigation is ${voice ? 'on' : 'off'}. Touch feedback is ${haptics ? 'on' : 'off'}. Use the switches to change either setting. These choices last until the app closes. Choose Home or Detect with the tabs.`);
+  const previousSettings = useRef({ voice, haptics });
+  const hasMounted = useRef(false);
+
+  useEffect(() => {
+    const previous = previousSettings.current;
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
+    if (previous.voice !== voice) {
+      if (!voice) {
+        Speech.stop();
+        Speech.speak('Voice navigation is off. Your phone screen reader can still read the app.', { rate: 0.92 });
+      }
+    } else if (previous.haptics !== haptics && voice) {
+      Speech.stop();
+      Speech.speak(`Touch feedback is now ${haptics ? 'on' : 'off'}.`, { rate: 0.92 });
+    }
+    previousSettings.current = { voice, haptics };
+  }, [voice, haptics]);
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.intro}><View style={styles.eyebrow}><View style={styles.dot} /><Text style={styles.eyebrowText}>MAKE IT YOURS</Text></View><Text style={styles.title} accessibilityRole="header">Make this feel{ '\n' }right for you.</Text><Text style={styles.subtitle}>Choose whether you’d like spoken or touch feedback.</Text></View>
