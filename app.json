@@ -24,6 +24,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
+      "bundleIdentifier": "com.archcity.visionassist",
       "supportsTablet": true,
       "infoPlist": {
         "NSSpeechRecognitionUsageDescription": "Allow Vision Assist to turn your spoken command into text.",
@@ -31,6 +32,7 @@
       }
     },
     "android": {
+      "package": "com.archcity.visionassist",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
