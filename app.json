@@ -24,7 +24,11 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSSpeechRecognitionUsageDescription": "Allow Vision Assist to turn your spoken command into text.",
+        "NSMicrophoneUsageDescription": "Allow Vision Assist to listen only when you start a voice command."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -33,10 +37,20 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "04b58089-39fd-4c19-be26-d97c0e0b82ae"
+      }
+    },
+    "owner": "archcity"
   }
 }
